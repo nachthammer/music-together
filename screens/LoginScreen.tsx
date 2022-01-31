@@ -5,17 +5,55 @@ import { Platform, StyleSheet, TextInput } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 
 import { Pressable } from "react-native";
+import Button from "../components/Button";
+import { Text, View } from "../components/Themed";
+import {
+  NavigationHelpersContext,
+  useNavigation,
+} from "@react-navigation/native";
 
-import { Text, View, Button } from "../components/Themed";
-import { NavigationHelpersContext } from "@react-navigation/native";
+import axios from "axios";
+import { convertError } from "../util";
 
-export default function LoginScreen({ navigation }: any) {
+type LoginScreenProps = {
+  login: (username: string) => void;
+};
+
+export default function LoginScreen({ login }: LoginScreenProps) {
+  const navigation = useNavigation();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loginFailed, setLoginFailed] = useState<boolean>(false);
 
+  const [loginFailedString, setLoginFailedString] = useState<string>("");
+
   const validateLogin = () => {
-    setLoginFailed(true);
+    console.log(login);
+    const requestData = {
+      username: username,
+      password: password,
+    };
+    console.log("validating login");
+    axios
+      .post("/api/login", requestData)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data === "correct user") {
+          login(username);
+          setLoginFailed(false);
+          navigation.navigate("Home");
+          return;
+        }
+      })
+      .catch((err) => {
+        setLoginFailed(true);
+        setLoginFailedString(err.response.data);
+      });
+  };
+
+  const goToRegisterScreen = () => {
+    console.log("goto register screen.");
+    navigation.navigate("Register");
   };
 
   return (
@@ -43,19 +81,17 @@ export default function LoginScreen({ navigation }: any) {
       </View>
 
       <View>
-        <Pressable onPress={navigation.navigate("Register")}>
+        <Pressable onPress={goToRegisterScreen}>
           <Text>You have no account yet? Register here.</Text>
         </Pressable>
       </View>
 
       <View style={styles.loginButton}>
-        <Button title="Press me" onPress={validateLogin} />
+        <Button title="Login" onPress={validateLogin} style={""} />
       </View>
       {loginFailed && (
         <View style={styles.failedMessage}>
-          <Text style={styles.failedMessageText}>
-            Wrong username or password.
-          </Text>
+          <Text style={styles.failedMessageText}>{loginFailedString}</Text>
         </View>
       )}
       {/* Use a light status bar on iOS to account for the black space above the modal */}
@@ -81,6 +117,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 5,
+    paddingLeft: 12,
   },
   info: {
     marginBottom: 10,

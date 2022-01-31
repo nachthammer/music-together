@@ -42,6 +42,6 @@ flask db upgrade
 Then you have to set the environment varibale FLASK_APP=main.py and FLASK_RUN_PORT=6001.
 
 Then just run 
-````shell
+```shell
 flask run --host=0.0.0.0
 ```

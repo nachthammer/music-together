@@ -19,3 +19,6 @@ expo start
 ```
 
 You then get a QR code, you can scan with your expo App on your phone.
+
+Make sure your backend is serving at the same Port as the 
+`axios.defaults.baseURL` line in App.tsx. You can just change the line depending on your local ip.

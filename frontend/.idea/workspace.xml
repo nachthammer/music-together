@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="feat: a lot og things done in the frontend">
-      <change afterPath="$PROJECT_DIR$/../backend/source/requests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/source/db_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/db_helpers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/source/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/source/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
+    <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/MusicRoomBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/MusicRoomBox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/SongBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/SongBox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modals/AddSongModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/AddSongModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modals/AreYouSureModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/AreYouSureModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modals/BaseModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/BaseModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modals/CreateMusicRoomModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/CreateMusicRoomModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modals/JoinMusicRoomModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/JoinMusicRoomModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modals/MusicRoomSettingsModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/MusicRoomSettingsModal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/HomeScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/LoginScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/LoginScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/MusicRoomScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/MusicRoomScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/RegisterScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/RegisterScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hooks/useCachedResources.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useCachedResources.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stores/MusicRoomStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stores/MusicRoomStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stores/UserStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stores/UserStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/util.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,8 +60,16 @@
       <workItem from="1643755991947" duration="8623000" />
       <workItem from="1643765484261" duration="2412000" />
       <workItem from="1643767927822" duration="1278000" />
-      <workItem from="1643821862801" duration="10157000" />
+      <workItem from="1643821862801" duration="10601000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data.">
+      <created>1643844269422</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1643844269422</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,6 +119,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: a lot og things done in the frontend" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: a lot og things done in the frontend" />
+    <MESSAGE value="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data." />
   </component>
 </project>

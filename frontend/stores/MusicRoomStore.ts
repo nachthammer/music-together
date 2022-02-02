@@ -39,6 +39,7 @@ export async function storeCurrentMusicRoom(value: MusicRoomBoxProps) {
         const jsonValue = JSON.stringify(value);
         await AsyncStorage.setItem("@current_music_room", jsonValue);
     } catch (e) {
+        // eslint-disable-next-line no-console
         console.log("Could not store current music.");
     }
 }
@@ -56,6 +57,7 @@ export async function readCurrentMusicRoom(): Promise<MusicRoomBoxProps> {
         }
         return defaultMusicRoom;
     } catch (e) {
+        // eslint-disable-next-line no-console
         console.log(e);
         return defaultMusicRoom;
     }

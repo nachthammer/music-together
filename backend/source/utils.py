@@ -10,7 +10,8 @@ from source.youtube_api import url_to_mp3_encoded
 def verify_user_data(username: str, password: str) -> bool:
     if db_get_user_secret_and_salt_if_exists(username) is not None:
         stored_password_hash, salt = db_get_user_secret_and_salt_if_exists(username)
-        if get_encrypted_user_secret_from_secret_params(password=_sha512(password), salt=salt) == get_encrypted_user_secret_from_secret_params(password=stored_password_hash, salt=salt):
+        if get_encrypted_user_secret_from_secret_params(password=_sha512(password), salt=salt) == \
+                get_encrypted_user_secret_from_secret_params(password=stored_password_hash, salt=salt):
             return True
 
     return False
@@ -64,4 +65,3 @@ def email_already_exists(username: str) -> bool:
     if user is not None:
         return True
     return False
-

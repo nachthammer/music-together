@@ -1,12 +1,11 @@
 import json
 
 from flask import request, jsonify
-from sqlalchemy.exc import OperationalError  # type: ignore
 
+from source import app
 from source.utils import verify_user_data, username_already_exists, email_already_exists, register_user, \
     music_room_name_for_username_already_exists, add_music_room_for_user, get_music_rooms_for_user, \
     music_url_already_in_the_room, insert_song_into_music_room, get_content_from_room
-from source import app
 
 
 @app.route('/')

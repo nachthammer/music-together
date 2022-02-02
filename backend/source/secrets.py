@@ -1,12 +1,6 @@
-import base64
-import binascii
-import time
 import uuid
 from hashlib import sha512
-from typing import Tuple, Optional
-
-import cryptography  # type: ignore
-from cryptography.fernet import Fernet  # type: ignore
+from typing import Tuple
 
 
 def _sha512(message: str) -> str:

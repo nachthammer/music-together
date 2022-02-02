@@ -2,7 +2,7 @@ from typing import Optional, Tuple, List
 
 from source import db
 from source.models import User, MusicRooms, MusicContent
-from source.secrets import get_encrypted_user_secret_from_secret_params, create_encrypted_user_secret_and_params, \
+from source.secrets import create_encrypted_user_secret_and_params, \
     generate_random_guid
 
 

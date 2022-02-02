@@ -35,6 +35,5 @@ class MusicContent(db.Model):  # type: ignore
     content_url = db.Column(db.Text(), unique=False, nullable=False)
     mp3_encoded = db.Column(db.Text(), unique=False, nullable=False)
 
-
     def __repr__(self):
         return f"Id = {self.id}"

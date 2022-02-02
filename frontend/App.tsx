@@ -54,7 +54,7 @@ export default function App() {
                             <HomeScreen
                                 {...{
                                     title: "Homepage title",
-                                    usernameProp: username,
+                                    username: username,
                                     setMusicRoomProps: setCurrentMusicRoomProps
                                 }}
                             />

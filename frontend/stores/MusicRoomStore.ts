@@ -16,7 +16,7 @@ function getMusicRooms() {
         const jsonValue = AsyncStorage.getItem("@music_rooms");
         jsonValue
             .then((value) => {
-                if (value != null) {
+                if (value !== null) {
                     return JSON.parse(value);
                 } 
                 return [];

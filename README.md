@@ -22,3 +22,13 @@ You then get a QR code, you can scan with your expo App on your phone.
 
 Make sure your backend is serving at the same Port as the 
 `axios.defaults.baseURL` line in App.tsx. You can just change the line depending on your local ip.
+
+## Contributing
+
+Run the configures linter in the frontend directory before pushing your code.
+
+```shell
+npm run lint
+```
+
+In the near future, console.logs will not be a warning anymore, so remove them before committing or the soon existing pipeline will fail.

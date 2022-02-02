@@ -55,6 +55,7 @@ export default function App() {
                                 {...{
                                     title: "Homepage title",
                                     username: username,
+                                    currentMusicRoomProps: currentMusicRoomProps,
                                     setMusicRoomProps: setCurrentMusicRoomProps
                                 }}
                             />

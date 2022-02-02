@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="feat: a lot og things done in the frontend">
+      <change afterPath="$PROJECT_DIR$/modals/AreYouSureModal.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/modals/MusicRoomSettingsModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/source/db_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/db_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/source/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/source/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/MusicRoomBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/MusicRoomBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/HomeScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +66,7 @@
       <workItem from="1643755991947" duration="8623000" />
       <workItem from="1643765484261" duration="2412000" />
       <workItem from="1643767927822" duration="1278000" />
-      <workItem from="1643821862801" duration="695000" />
+      <workItem from="1643821862801" duration="4017000" />
     </task>
     <servers />
   </component>

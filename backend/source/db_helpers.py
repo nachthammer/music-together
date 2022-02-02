@@ -57,6 +57,25 @@ def db_insert_music_room_for_user(username: str, music_room_name: str) -> Option
     return uuid
 
 
+def db_remove_music_room_row(username: str, uuid: str) -> str:
+    music_room_row = MusicRooms.query.filter_by(username=username, uuid=uuid).first()
+    if music_room_row is None:
+        return "There is no row to remove"
+    db.session.remove(music_room_row)
+    db.session.commit()
+    return "Success"
+
+
+def db_remove_songs_for_room(uuid: str) -> str:
+    song_rows = MusicContent.query.filter_by(music_room_uuid=uuid).all()
+    if song_rows is None:
+        return "There are no songs in this room"
+    for song_row in song_rows:
+        db.session.remove(song_row)
+    db.session.commit()
+    return "Success"
+
+
 def db_get_content_from_room(uuid: str) -> Optional[List[Tuple[str, str]]]:
     content_list = MusicContent.query.filter_by(music_room_uuid=uuid).all()
     if content_list is None or len(content_list) == 0:

@@ -7,15 +7,18 @@ import MusicRoomBox, {MusicRoomBoxProps} from "../components/MusicRoomBox";
 import {retrieveMusicRoomsFromServer} from "../util";
 import CreateMusicRoomModal from "../modals/CreateMusicRoomModal";
 import JoinMusicRoomModal from "../modals/JoinMusicRoomModal";
+import MusicRoomSettingsModal from "../modals/MusicRoomSettingsModal";
 
 type HomeScreenProps = {
     username: string;
     title: string;
+    currentMusicRoomProps:  MusicRoomBoxProps;
     setMusicRoomProps: React.Dispatch<React.SetStateAction<MusicRoomBoxProps>>;
 };
 
 export default function HomeScreen({
     username,
+    currentMusicRoomProps,
     setMusicRoomProps
 }: HomeScreenProps) {
     const [musicRooms, setMusicRooms] = useState<MusicRoomBoxProps[]>([]);
@@ -23,9 +26,9 @@ export default function HomeScreen({
 
     const [createRoomModalVisible, setCreateRoomModalVisible] =
         useState<boolean>(false);
-
     const [joinRoomModalVisible, setJoinRoomModalVisible] =
         useState<boolean>(false);
+    const [musicRoomSettingsModalVisible, setMusicRoomSettingsModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
         retrieveMusicRoomsFromServer(username).then((retrievedMusicRooms) => {
@@ -36,6 +39,17 @@ export default function HomeScreen({
     const addMusicRoom = (musicRoom: MusicRoomBoxProps) => {
         setMusicRooms(musicRooms.concat(musicRoom));
     };
+
+    const openMusicRoomSettings = (musicRoom: MusicRoomBoxProps) => {
+        setMusicRoomSettingsModalVisible(true);
+    }
+
+    const removeMusicRoom = () => {
+        let newMusicRooms = musicRooms.filter(function(props, index, arr){
+            return props.uuid != currentMusicRoomProps.uuid;
+        });
+        setMusicRooms(newMusicRooms);
+    }
 
     const joinMusicRoom = (musicRoom: MusicRoomBoxProps) => {
         setMusicRooms(musicRooms.concat(musicRoom));
@@ -80,9 +94,10 @@ export default function HomeScreen({
                 <Text style={styles.title}>Your music rooms: </Text>
                 <ScrollView style={styles.scrollView}>
                     {musicRooms.map((props, index) => 
-                        <MusicRoomBox {...props} onClick={navigateToMusicRoom} key={index}/>
+                        <MusicRoomBox {...props} onClick={navigateToMusicRoom} onLongCLick={openMusicRoomSettings} key={index}/>
                     )}
                 </ScrollView>
+                <MusicRoomSettingsModal visible={musicRoomSettingsModalVisible} username={username} removeMusicRoom={removeMusicRoom} musicRoomProps={currentMusicRoomProps} closeModal={() => setMusicRoomSettingsModalVisible(false)}></MusicRoomSettingsModal>
             </View>
         </>
     );

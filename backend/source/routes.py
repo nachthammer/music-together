@@ -5,7 +5,7 @@ from flask import request, jsonify  # type: ignore
 from source import app
 from source.utils import verify_user_data, username_already_exists, email_already_exists, register_user, \
     music_room_name_for_username_already_exists, add_music_room_for_user, get_music_rooms_for_user, \
-    music_url_already_in_the_room, insert_song_into_music_room, get_content_from_room
+    music_url_already_in_the_room, insert_song_into_music_room, get_content_from_room, delete_music_room_for_user
 
 
 @app.route('/')
@@ -89,6 +89,23 @@ def add_music_room():
     uuid = add_music_room_for_user(request_data["username"], request_data["musicRoomName"])
 
     return uuid, 200
+
+
+@app.route('/api/delete-music-room', methods=["POST"])
+def add_music_room():
+    request_data = json.loads(request.data.decode(encoding="utf-8"))
+    print(request_data)
+    if "username" not in request_data:
+        return "You need to provide a value for the username key.", 400
+    if "uuid" not in request_data:
+        return "You need to provide a value for the uuid key.", 400
+
+    if len(str(request_data["username"])) < 4:
+        return "Non-valid username", 400
+
+    delete_music_room_for_user(request_data["username"], request_data["uuid"])
+
+    return "Music room deleted", 200
 
 
 @app.route('/api/add-song-to-room', methods=["POST"])

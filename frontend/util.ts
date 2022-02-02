@@ -1,6 +1,5 @@
 import axios from "axios";
 import { MusicRoomBoxProps } from "./components/MusicRoomBox";
-import useUserInfos from "./hooks/useUserInfos";
 
 export async function retrieveMusicRoomsFromServer(
     username: string

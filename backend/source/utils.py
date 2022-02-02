@@ -3,7 +3,7 @@ from typing import Optional, List, Tuple
 from source.db_helpers import db_get_user_secret_and_salt_if_exists, db_get_user_by_username, db_get_user_by_email, \
     db_create_user_row, db_music_room_present_for_user, db_insert_music_room_for_user, db_get_music_rooms_from_user, \
     db_get_content_from_room, db_add_content_to_room, db_song_url_already_exists, db_remove_music_room_row, \
-    db_remove_songs_for_room
+    db_remove_songs_for_room, db_get_music_room_with_uuid, db_change_music_room_name
 from source.secrets import get_encrypted_user_secret_from_secret_params, _sha512, \
     get_encrypted_user_secret_from_clean_params
 from source.youtube_api import url_to_mp3_encoded
@@ -27,6 +27,12 @@ def delete_music_room_for_user(username: str, uuid: str):
 
 def register_user(username: str, email: str, password: str):
     db_create_user_row(username, email, password)
+
+
+def change_music_room_name(uuid: str, new_name: str):
+    if db_get_music_room_with_uuid(uuid=uuid) is None:
+        return
+    db_change_music_room_name(music_room_uuid=uuid, new_name=new_name)
 
 
 def music_room_name_for_username_already_exists(username: str, music_room_name: str) -> bool:

@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, TextInput} from "react-native";
 import Button from "../components/Button";
 import {Text, View} from "../components/Themed";
 import {useNavigation} from "@react-navigation/native";
+import {storeUsername} from "../stores/UserStore";
 
 import axios from "axios";
 
@@ -19,12 +20,10 @@ export default function LoginScreen({login}: LoginScreenProps) {
     const [loginFailedString, setLoginFailedString] = useState<string>("");
 
     const validateLogin = () => {
-        console.log(login);
         const requestData = {
             username: username,
             password: password
         };
-        console.log("validating login");
         axios
             .post("/api/login", requestData)
             .then((response) => {
@@ -32,6 +31,7 @@ export default function LoginScreen({login}: LoginScreenProps) {
                     login(username);
                     setLoginFailed(false);
                     navigation.navigate("Home");
+                    storeUsername(username);
                     return;
                 }
             })
@@ -42,7 +42,6 @@ export default function LoginScreen({login}: LoginScreenProps) {
     };
 
     const goToRegisterScreen = () => {
-        console.log("goto register screen.");
         navigation.navigate("Register");
     };
 

@@ -9,6 +9,7 @@ export type SongBoxProps = SongProps;
 export default function SongBox({name, songUrl}: SongBoxProps) {
 
     const playSong = () => {
+        // eslint-disable-next-line no-console
         console.log(`Playing song ${name} with url ${songUrl} in the background...`);
     };
 

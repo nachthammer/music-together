@@ -28,8 +28,8 @@ export default function App() {
     const [username, setUsername] = useState("");
     const [currentMusicRoomProps, setCurrentMusicRoomProps] =
     useState<MusicRoomBoxProps>({
-        uuid: "0",
-        name: "Default playlist",
+        uuid: "",
+        name: "",
         username: ""
     });
 
@@ -54,7 +54,6 @@ export default function App() {
                             <HomeScreen
                                 {...{
                                     title: "Homepage title",
-                                    username: username,
                                     currentMusicRoomProps: currentMusicRoomProps,
                                     setMusicRoomProps: setCurrentMusicRoomProps
                                 }}

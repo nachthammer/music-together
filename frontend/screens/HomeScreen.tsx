@@ -2,25 +2,27 @@ import React, {useEffect, useState} from "react";
 import {ScrollView, StyleSheet, TouchableOpacity} from "react-native";
 
 import {Text, View} from "../components/Themed";
+import Button from "../components/Button";
 import {useNavigation} from "@react-navigation/native";
 import MusicRoomBox, {MusicRoomBoxProps} from "../components/MusicRoomBox";
 import {retrieveMusicRoomsFromServer} from "../util";
 import CreateMusicRoomModal from "../modals/CreateMusicRoomModal";
 import JoinMusicRoomModal from "../modals/JoinMusicRoomModal";
 import MusicRoomSettingsModal from "../modals/MusicRoomSettingsModal";
+import {readUsername} from "../stores/UserStore";
 
 type HomeScreenProps = {
-    username: string;
     title: string;
     currentMusicRoomProps:  MusicRoomBoxProps;
     setMusicRoomProps: React.Dispatch<React.SetStateAction<MusicRoomBoxProps>>;
 };
 
 export default function HomeScreen({
-    username,
     currentMusicRoomProps,
     setMusicRoomProps
 }: HomeScreenProps) {
+    const [isLoading, setIsLoading] = useState(true);
+    const [username, setUsername] = useState("");
     const [musicRooms, setMusicRooms] = useState<MusicRoomBoxProps[]>([]);
     const navigation = useNavigation();
 
@@ -31,73 +33,65 @@ export default function HomeScreen({
     const [musicRoomSettingsModalVisible, setMusicRoomSettingsModalVisible] = useState<boolean>(false);
 
     useEffect(() => {
-        retrieveMusicRoomsFromServer(username).then((retrievedMusicRooms) => {
-            setMusicRooms(retrievedMusicRooms);
+        readUsername().then((value) => {
+            setUsername(value);
         });
     }, []);
+
+    useEffect(() => {
+        retrieveMusicRoomsFromServer(username).then((retrievedMusicRooms) => {
+            setMusicRooms(retrievedMusicRooms);
+            setIsLoading(false);
+        });
+    }, [createRoomModalVisible, joinRoomModalVisible, musicRoomSettingsModalVisible, username]);
 
     const addMusicRoom = (musicRoom: MusicRoomBoxProps) => {
         setMusicRooms(musicRooms.concat(musicRoom));
     };
 
-    const openMusicRoomSettings = (musicRoom: MusicRoomBoxProps) => {
+    const openMusicRoomSettings = () => {
         setMusicRoomSettingsModalVisible(true);
-    }
+    };
 
     const removeMusicRoom = () => {
         let newMusicRooms = musicRooms.filter(function(props, index, arr){
-            return props.uuid != currentMusicRoomProps.uuid;
+            return props.uuid !== currentMusicRoomProps.uuid;
         });
         setMusicRooms(newMusicRooms);
-    }
+    };
 
     const joinMusicRoom = (musicRoom: MusicRoomBoxProps) => {
         setMusicRooms(musicRooms.concat(musicRoom));
     };
 
-    const navigateToMusicRoom = (musicRoomProps: MusicRoomBoxProps) => {
-        setMusicRoomProps(musicRoomProps);
+    const navigateToMusicRoom = () => {
         navigation.navigate("MusicRoom");
     };
 
     return (
-        <>
+        !isLoading && <>
             {<CreateMusicRoomModal
                 visible={createRoomModalVisible}
-                username={username}
                 addMusicRoom={addMusicRoom}
                 closeModal={() => setCreateRoomModalVisible(false)}
             />}
             <JoinMusicRoomModal
                 visible={joinRoomModalVisible}
-                username={username}
                 joinMusicRoom={joinMusicRoom}
                 closeModal={() => setJoinRoomModalVisible(false)}
             />
             <View style={styles.container}>
                 <View style={styles.roomButtons}>
-                    <TouchableOpacity
-                        activeOpacity={0.95}
-                        style={styles.button}
-                        onPress={() => setCreateRoomModalVisible(true)}
-                    >
-                        <Text style={styles.buttonText}>Create a new music room</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        activeOpacity={0.95}
-                        style={styles.button}
-                        onPress={() => setJoinRoomModalVisible(true)}
-                    >
-                        <Text style={styles.buttonText}>Join a new music room</Text>
-                    </TouchableOpacity>
+                    <Button title={"Create a new music room"} onPress={() => setCreateRoomModalVisible(true)} style={{width: "45%"}}/>
+                    <Button title={"Join a new music room"} onPress={() => setJoinRoomModalVisible(true)} style={{width: "45%"}}/>
                 </View>
-                <Text style={styles.title}>Your music rooms: </Text>
+                <Text style={styles.title}>Your music rooms: {username}</Text>
                 <ScrollView style={styles.scrollView}>
                     {musicRooms.map((props, index) => 
-                        <MusicRoomBox {...props} onClick={navigateToMusicRoom} onLongCLick={openMusicRoomSettings} key={index}/>
+                        <MusicRoomBox {...props} onClick={navigateToMusicRoom} onLongClick={openMusicRoomSettings} key={index}/>
                     )}
                 </ScrollView>
-                <MusicRoomSettingsModal visible={musicRoomSettingsModalVisible} username={username} removeMusicRoom={removeMusicRoom} musicRoomProps={currentMusicRoomProps} closeModal={() => setMusicRoomSettingsModalVisible(false)}></MusicRoomSettingsModal>
+                <MusicRoomSettingsModal visible={musicRoomSettingsModalVisible} removeMusicRoom={removeMusicRoom} closeModal={() => setMusicRoomSettingsModalVisible(false)}></MusicRoomSettingsModal>
             </View>
         </>
     );

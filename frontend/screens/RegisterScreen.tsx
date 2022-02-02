@@ -36,7 +36,6 @@ export default function RegisterScreen({login}: RegisterScreenProps) {
         axios
             .post("/api/register", requestData)
             .then((response) => {
-                console.log(response.data);
                 if (response.data === "registration completed") {
                     login(username);
                     setRegisterFailed(false);

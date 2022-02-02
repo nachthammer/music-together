@@ -6,6 +6,9 @@ import axios from "axios";
 import {useNavigation} from "@react-navigation/native";
 import AddSongModal from "../modals/AddSongModal";
 import SongBox from "../components/SongBox";
+import {readUsername} from "../stores/UserStore";
+import {readCurrentMusicRoom} from "../stores/MusicRoomStore";
+import { MusicRoomBoxProps } from "../components/MusicRoomBox";
 
 export type SongProps = {
     name: string;
@@ -13,17 +16,30 @@ export type SongProps = {
 };
 
 export type MusicRoomScreenProps = {
-    uuid: string;
-    name: string;
-    username: string;
-    isOwner?: boolean;
+
 };
 
-export default function MusicRoomScreen({
-    uuid,
-    username,
-    isOwner
-}: MusicRoomScreenProps) {
+// eslint-disable-next-line no-empty-pattern
+export default function MusicRoomScreen({}: MusicRoomScreenProps) {
+    const navigation = useNavigation();
+    const [username, setUsername] = useState("");
+    useEffect(() => {
+        readUsername().then((value) => {
+            setUsername(value);
+        });
+    }, []);
+    const [musicRoomProps, setMusicRoomProps] = useState<MusicRoomBoxProps>({
+        name: "",
+        uuid: "",
+        username: ""
+    });
+    useEffect(() => {
+        readCurrentMusicRoom().then((value) => {
+            setMusicRoomProps(value);
+        });
+    }, [navigation]);
+
+
     const [songs, setSongs] = useState<SongProps[]>([]);
 
     const [addSongModalVisible, setAddSongModalVisible] = useState<boolean>(false);
@@ -39,13 +55,12 @@ export default function MusicRoomScreen({
     useEffect(() => {
         const requestData = {
             username: username,
-            uuid: uuid
+            uuid: musicRoomProps.uuid
         };
         axios
             .post("/api/get-songs-from-uuid", requestData)
             .then((response) => {
                 const data = response.data;
-                console.log("gotten songs", response.data);
                 let allSongs: SongProps[] = [];
                 for (let i = 0; i < data.length; i++) {
                     allSongs.push({
@@ -54,7 +69,6 @@ export default function MusicRoomScreen({
                     });
                 }
                 setSongs(allSongs);
-                console.log(allSongs);
             })
             .catch(() => {
 
@@ -62,18 +76,16 @@ export default function MusicRoomScreen({
     }, []);
 
     const addSongToRoom = (newSong: SongProps) => {
-        console.log("addSongToRoom");
         setSongs(songs.concat(newSong));
-        console.log("songs", songs);
     };
 
     return (
         <View style={styles.container}>
-            {isOwner && 
+            {
                 <>
                     <Button title="Add new song" onPress={openAddSongModal} style={{height: 35}}/>
                     <AddSongModal visible={addSongModalVisible} addSong={addSongToRoom} closeModal={closeAddSongModal}
-                        music_room_uuid={uuid} username={username}/>
+                        music_room_uuid={musicRoomProps.uuid}/>
                 </>
 
             }

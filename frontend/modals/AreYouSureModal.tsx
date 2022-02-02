@@ -1,9 +1,6 @@
-import {useState} from "react";
-import {StyleSheet, TextInput} from "react-native";
+import {StyleSheet} from "react-native";
 import {Text, View} from "../components/Themed";
 import BaseModal from "./BaseModal";
-import axios from "axios";
-import {SongProps} from "../screens/MusicRoomScreen";
 import Button from "../components/Button";
 
 
@@ -14,12 +11,12 @@ type AreYouSureModalProps = {
     cancel: () => void;
     confirmMessage?: string;
     cancelMessage?: string;
+    closeModal: () => void;
 };
 
-export default function AreYouSureModal({visible, message, confirm, cancel, confirmMessage, cancelMessage}: AreYouSureModalProps) {
-
+export default function AreYouSureModal({visible, message, confirm, cancel, confirmMessage, cancelMessage, closeModal}: AreYouSureModalProps) {
     return (
-        <BaseModal isVisible={visible} closeModal={confirm}>
+        <BaseModal isVisible={visible} closeModal={closeModal}>
             <Text style={styles.title}>{message ?? "Are you sure?"}</Text>
             <View style={styles.roomButtons}>
                 <Button title={confirmMessage ?? "Yes"} onPress={confirm} style={styles.button}></Button>

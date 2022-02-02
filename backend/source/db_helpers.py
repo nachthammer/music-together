@@ -61,7 +61,7 @@ def db_remove_music_room_row(username: str, uuid: str) -> str:
     music_room_row = MusicRooms.query.filter_by(username=username, uuid=uuid).first()
     if music_room_row is None:
         return "There is no row to remove"
-    db.session.remove(music_room_row)
+    db.session.delete(music_room_row)
     db.session.commit()
     return "Success"
 
@@ -71,9 +71,30 @@ def db_remove_songs_for_room(uuid: str) -> str:
     if song_rows is None:
         return "There are no songs in this room"
     for song_row in song_rows:
-        db.session.remove(song_row)
+        db.session.delete(song_row)
     db.session.commit()
     return "Success"
+
+
+def db_get_music_room_with_uuid(uuid: str):
+    music_room_row = MusicRooms.query.filter_by(uuid=uuid).first()
+    return music_room_row
+
+
+def db_change_music_room_name(music_room_uuid: str, new_name: str):
+    row_changed = MusicRooms.query.filter_by(uuid=music_room_uuid).first()
+    print(row_changed)
+    db.session.delete(row_changed)
+    db.session.commit()
+
+    new_row = MusicRooms(
+        username=row_changed.username, uuid=row_changed.uuid, music_room_name=new_name
+    )
+    db.session.add(new_row)
+    db.session.commit()
+
+
+    return row_changed
 
 
 def db_get_content_from_room(uuid: str) -> Optional[List[Tuple[str, str]]]:

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {StyleSheet, TextInput} from "react-native";
 import {Text, View} from "../components/Themed";
 import BaseModal from "./BaseModal";
@@ -7,35 +7,50 @@ import {SongProps} from "../screens/MusicRoomScreen";
 import Button from "../components/Button";
 import { MusicRoomBoxProps } from "../components/MusicRoomBox";
 import AreYouSureModal from "./AreYouSureModal";
+import {readUsername} from "../stores/UserStore";
+import {readCurrentMusicRoom} from "../stores/MusicRoomStore";
 
 
 type MusicRoomSettingsModalProps = {
-    username: string;
     visible?: boolean;
-    musicRoomProps: MusicRoomBoxProps;
     removeMusicRoom: () => void;
     closeModal: () => void;
 };
 
-export default function MusicRoomSettingsModal({username, visible, musicRoomProps, removeMusicRoom, closeModal}: MusicRoomSettingsModalProps) {
-    const [musicRoomName, setMusicRoomName] = useState<string>(musicRoomProps.name);
+export default function MusicRoomSettingsModal({visible, removeMusicRoom, closeModal}: MusicRoomSettingsModalProps) {
+    const [username, setUsername] = useState("");
+    useEffect(() => {
+        readUsername().then((value) => {
+            setUsername(value);
+        });
+    }, []);
+
+    const [musicRoom, setMusicRoom] = useState<MusicRoomBoxProps>({
+        name: "",
+        uuid: "",
+        username: ""
+    });
+    useEffect(() => {
+        readCurrentMusicRoom().then((value) => {
+            setMusicRoom(value);
+        });
+    }, [visible]);
+    const [musicRoomName, setMusicRoomName] = useState<string>();
 
     const [returnedStatusCode, setReturnedStatusCode] = useState<number>(200);
     const [returnedMessage, setReturnedMessage] = useState<string>("");
 
     const [deleteRoomModalVisible, setDeleteRoomModalVisible] = useState<boolean>(false);
 
-
     const changeNameOfMusicRoom = () => {
-        if (musicRoomProps.name === musicRoomName) {
+        if (musicRoom.name === musicRoomName) {
             setReturnedMessage("The new name cannot be the old name.");
             setReturnedStatusCode(200);
             return;
         }
-        //console.log("add new song for user", username);
         const requestData = {
             username: username,
-            uuid: musicRoomProps.uuid,
+            uuid: musicRoom.uuid,
             newName: musicRoomName
         };
 
@@ -55,7 +70,7 @@ export default function MusicRoomSettingsModal({username, visible, musicRoomProp
 
         const requestData = {
             username: username,
-            uuid: musicRoomProps.uuid
+            uuid: musicRoom.uuid
         };
 
         axios
@@ -63,8 +78,9 @@ export default function MusicRoomSettingsModal({username, visible, musicRoomProp
             .then((response) => {
                 setReturnedMessage(response.data);
                 setReturnedStatusCode(response.status);
-                removeMusicRoom;
-                closeModal;
+                setDeleteRoomModalVisible(false);
+                removeMusicRoom();
+                closeModal();
             })
             .catch((err) => {
                 setReturnedMessage(err.response.data);
@@ -74,7 +90,7 @@ export default function MusicRoomSettingsModal({username, visible, musicRoomProp
 
     return (
         <BaseModal isVisible={visible} closeModal={closeModal}>
-            <Text style={styles.title}>{musicRoomProps.name}</Text>
+            <Text style={styles.title}>{musicRoom.name}</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.info}>Change music room name</Text>
                 <TextInput
@@ -91,7 +107,7 @@ export default function MusicRoomSettingsModal({username, visible, musicRoomProp
             </View>
             <View style={styles.submitButton}>
                 <Button title="Delete room" onPress={() => setDeleteRoomModalVisible(true)} style={{width: "100%"}}/>
-                <AreYouSureModal visible={deleteRoomModalVisible} confirm={deleteMusicRoom} cancel={() => setDeleteRoomModalVisible(false)}/>
+                <AreYouSureModal visible={deleteRoomModalVisible} confirm={deleteMusicRoom} cancel={() => setDeleteRoomModalVisible(false)} closeModal={closeModal}/>
             </View>
             <Text style={{color: returnedStatusCode === 200 ? "green" : "red", marginTop: 20}}>{returnedMessage}</Text>
         </BaseModal>

@@ -1,24 +1,30 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {StyleSheet, TextInput} from "react-native";
 import {Text, View} from "../components/Themed";
 import BaseModal from "./BaseModal";
 import axios from "axios";
 import {MusicRoomBoxProps} from "../components/MusicRoomBox";
 import Button from "../components/Button";
+import {readUsername} from "../stores/UserStore";
 
 type CreateMusicRoomModalProps = {
-    username: string;
     visible?: boolean;
     addMusicRoom: (musicRoom: MusicRoomBoxProps) => void;
     closeModal: () => void;
 };
 
 export default function CreateMusicRoomModal({
-    username,
     visible,
     addMusicRoom,
     closeModal
 }: CreateMusicRoomModalProps) {
+    const [username, setUsername] = useState("");
+    useEffect(() => {
+        readUsername().then((value) => {
+            setUsername(value);
+        });
+    }, []);
+
     const [musicRoomName, setMusicRoomName] = useState<string>("");
 
     const [createMusicRoomFailedText, setCreateMusicRoomFailedText] =
@@ -44,6 +50,9 @@ export default function CreateMusicRoomModal({
                 addMusicRoom(newMusicRoom);
                 setCreatingFailed(false);
                 setCreateSucceeded(true);
+                closeModal();
+                setCreateSucceeded(false);
+                setMusicRoomName("");
             })
             .catch((err) => {
                 setCreateMusicRoomFailedText(err.response.data);

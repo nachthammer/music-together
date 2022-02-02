@@ -1,21 +1,27 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {StyleSheet, TextInput} from "react-native";
 import {Text, View} from "../components/Themed";
 import BaseModal from "./BaseModal";
 import axios from "axios";
 import {SongProps} from "../screens/MusicRoomScreen";
 import Button from "../components/Button";
+import {readUsername} from "../stores/UserStore";
 
 
 type CreateMusicRoomModalProps = {
-    username: string;
     visible?: boolean;
     music_room_uuid: string;
     addSong: (songProps: SongProps) => void;
     closeModal: () => void;
 };
 
-export default function AddSongModal({username, visible, music_room_uuid, addSong, closeModal}: CreateMusicRoomModalProps) {
+export default function AddSongModal({visible, music_room_uuid, addSong, closeModal}: CreateMusicRoomModalProps) {
+    const [username, setUsername] = useState("");
+    useEffect(() => {
+        readUsername().then((value) => {
+            setUsername(value);
+        });
+    }, []);
     const [songName, setSongName] = useState<string>("");
     const [songUrl, setSongUrl] = useState<string>("");
 
@@ -24,7 +30,6 @@ export default function AddSongModal({username, visible, music_room_uuid, addSon
 
 
     const addSongToMusicRoom = () => {
-        //console.log("add new song for user", username);
         const requestData = {
             username: username,
             uuid: music_room_uuid,
@@ -43,6 +48,7 @@ export default function AddSongModal({username, visible, music_room_uuid, addSon
                 }
                 setReturnedMessage(response.data);
                 setReturnedStatusCode(response.status);
+                closeModal();
             })
             .catch((err) => {
                 setReturnedMessage(err.response.data);

@@ -1,6 +1,7 @@
 import {StyleSheet, TouchableOpacity, Pressable} from "react-native";
 import {Text} from "./Themed";
 import React from "react";
+import {storeCurrentMusicRoom} from "../stores/MusicRoomStore";
 
 export type MusicRoomBoxProps = {
     uuid: string;
@@ -10,32 +11,32 @@ export type MusicRoomBoxProps = {
 
 type MusicRoomBoxComponentProps = MusicRoomBoxProps &
     {
-        onClick: (musicRoomProps: MusicRoomBoxProps) => void;
-        onLongCLick?: (musicRoomProps: MusicRoomBoxProps) => void;
+        onClick: () => void;
+        onLongClick?: () => void;
     }
 
-export default function MusicRoomBox({uuid, username, name, onClick, onLongCLick}: MusicRoomBoxComponentProps) {
+export default function MusicRoomBox({uuid, username, name, onClick, onLongClick}: MusicRoomBoxComponentProps) {
 
-    const goToMusicRoom = () => {
-        console.log("Go to music room");
-        onClick({
+    const updateCurrentMusicRoom = () => {
+        storeCurrentMusicRoom({
             uuid: uuid,
             name: name,
             username: username
         });
     };
 
-    const openMusicRoomSettings = () => {
-        console.log("Long press on", name);
-        if (onLongCLick===undefined) {
+    const goToMusicRoom = async () => {
+        await updateCurrentMusicRoom();
+        onClick();
+    };
+
+    const openMusicRoomSettings = async () => {
+        await updateCurrentMusicRoom();
+        if (onLongClick===undefined) {
             goToMusicRoom;
-            return
+            return;
         }
-        onLongCLick({
-            uuid: uuid,
-            name: name,
-            username: username
-        });
+        onLongClick();
     };
 
     return (

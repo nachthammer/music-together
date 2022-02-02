@@ -21,7 +21,7 @@
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
     "no-undef": "off",
     "no-use-before-define": "off",
-    "no-console": 1,
+    "no-console": "error",
     "no-unused-vars": 1,
     "semi": ["error", "always"],
     "semi-style": ["error", "last"],

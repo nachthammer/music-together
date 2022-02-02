@@ -4,7 +4,7 @@ import {Modal, StyleSheet} from "react-native";
 import Button from "../components/Button";
 import {View} from "../components/Themed";
 
-type BaseModalProps = {
+export type BaseModalProps = {
   closeModal: () => void;
   isVisible?: boolean;
   children?: React.ReactNode;
@@ -25,7 +25,6 @@ export default function BaseModal({ closeModal, isVisible, children }: BaseModal
                 {children}
             </View>
         </Modal>
-
     );
 }
 

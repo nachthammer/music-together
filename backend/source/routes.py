@@ -1,6 +1,6 @@
 import json
 
-from flask import request, jsonify
+from flask import request, jsonify  # type: ignore
 
 from source import app
 from source.utils import verify_user_data, username_already_exists, email_already_exists, register_user, \

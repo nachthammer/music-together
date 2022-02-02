@@ -1,9 +1,9 @@
 import os.path
 
-from flask import Flask
-from flask_cors import CORS
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask # type: ignore
+from flask_cors import CORS  # type: ignore
+from flask_migrate import Migrate  # type: ignore
+from flask_sqlalchemy import SQLAlchemy  # type: ignore
 
 app = Flask(__name__, static_folder="static/build")
 

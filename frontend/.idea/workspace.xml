@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="feat: a lot og things done in the frontend" />
+    <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="feat: a lot og things done in the frontend">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,6 +43,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2021.2.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -54,7 +57,8 @@
       <updated>1643755990730</updated>
       <workItem from="1643755991947" duration="8623000" />
       <workItem from="1643765484261" duration="2412000" />
-      <workItem from="1643767927822" duration="677000" />
+      <workItem from="1643767927822" duration="1278000" />
+      <workItem from="1643821862801" duration="695000" />
     </task>
     <servers />
   </component>

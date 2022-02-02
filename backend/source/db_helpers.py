@@ -20,10 +20,10 @@ def db_create_user_row(username: str, email: str, password: str):
     user_key_row = User.query.filter_by(username=username).first()
     if user_key_row is not None:
         return False
-    password_hash, salt = create_encrypted_user_secret_and_params(password=password)
+    password_and_salt_hash, salt = create_encrypted_user_secret_and_params(password=password)
 
     user_key = User(
-        username=username, email=email, salt=salt, secret=password_hash
+        username=username, email=email, salt=salt, secret=password_and_salt_hash
     )
     db.session.add(user_key)
     db.session.commit()

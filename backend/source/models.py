@@ -7,8 +7,8 @@ class User(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text(), unique=False, nullable=False)
     email = db.Column(db.Text(), unique=False, nullable=False)
-    secret = db.Column(db.Text(), unique=True, nullable=False)
-    salt = db.Column(db.Text(), unique=True, nullable=False)
+    secret = db.Column(db.Text(), unique=False, nullable=False)
+    salt = db.Column(db.Text(), unique=False, nullable=False)
 
     def __repr__(self):
         return f"Id = {self.id}"

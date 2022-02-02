@@ -19,7 +19,6 @@ def get_encrypted_user_secret_from_secret_params(password_hash: str, salt: str) 
     return _sha512(password_hash + salt)
 
 
-
 def create_encrypted_user_secret_and_params(password: str) -> Tuple[str, str]:
     salt = _sha512(generate_random_guid())
     password_hash = _sha512(password)

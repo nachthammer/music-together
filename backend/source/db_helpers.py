@@ -92,8 +92,6 @@ def db_change_music_room_name(music_room_uuid: str, new_name: str):
     )
     db.session.add(new_row)
     db.session.commit()
-
-
     return row_changed
 
 

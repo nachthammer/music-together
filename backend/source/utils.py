@@ -8,8 +8,9 @@ from source.youtube_api import url_to_mp3_encoded
 
 
 def verify_user_data(username: str, password: str) -> bool:
-    if db_get_user_secret_and_salt_if_exists(username) is not None:
-        stored_password_hash, salt = db_get_user_secret_and_salt_if_exists(username)
+    result = db_get_user_secret_and_salt_if_exists(username)
+    if result is not None:
+        stored_password_hash, salt = result
         if get_encrypted_user_secret_from_secret_params(password=_sha512(password), salt=salt) == \
                 get_encrypted_user_secret_from_secret_params(password=stored_password_hash, salt=salt):
             return True

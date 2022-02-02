@@ -1,0 +1,48 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "indent": ["error", 4],
+    "comma-spacing": "error",
+    "comma-dangle": "error",
+    "quotes": ["error", "double", { "allowTemplateLiterals": true }],
+    "no-undef": "off",
+    "no-use-before-define": "off",
+    "no-console": 1,
+    "no-unused-vars": 1,
+    "semi": ["error", "always"],
+    "semi-style": ["error", "last"],
+    "no-extra-parens": "error",
+    "no-duplicate-imports": "error",
+    "no-const-assign": "error",
+    "no-invalid-regexp": "error",
+    "no-self-assign": "error",
+    "no-self-compare": "error",
+    "no-unreachable": "error",
+    "no-unreachable-loop": "error",
+    "eqeqeq": "error",
+    "no-else-return": "error",
+    "no-lonely-if": "error",
+    "no-async-promise-executor": "error",
+    "yoda": ["error","never", { "onlyEquality": true }],
+    "no-shadow": "error",
+    "no-mixed-spaces-and-tabs": "error",
+    "vars-on-top": "error",
+    "no-useless-escape": "error",
+    "no-setter-return": "error",
+    "no-fallthrough": "warn"
+  }
+}

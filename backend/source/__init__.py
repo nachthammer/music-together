@@ -1,6 +1,6 @@
 import os.path
 
-from flask import Flask # type: ignore
+from flask import Flask  # type: ignore
 from flask_cors import CORS  # type: ignore
 from flask_migrate import Migrate  # type: ignore
 from flask_sqlalchemy import SQLAlchemy  # type: ignore

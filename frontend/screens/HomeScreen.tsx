@@ -1,115 +1,141 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
-import { Platform, StyleSheet, TextInput } from "react-native";
+import React, {useEffect, useState} from "react";
+import {ScrollView, StyleSheet, TouchableOpacity} from "react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
-
-import { Pressable, TouchableOpacity, Button } from "react-native";
-
-import { Text, View } from "../components/Themed";
-import {
-  NavigationHelpersContext,
-  useNavigation,
-} from "@react-navigation/native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types";
-import { MusicRoomProps } from "../components/MusicRoom";
-import MusicRoom from "../components/MusicRoom";
-import { retrieveMusicRoomsFromServer } from "../util";
-import useUserInfos from "../hooks/useUserInfos";
-import axios from "axios";
+import {Text, View} from "../components/Themed";
+import {useNavigation} from "@react-navigation/native";
+import MusicRoomBox, {MusicRoomBoxProps} from "../components/MusicRoomBox";
+import {retrieveMusicRoomsFromServer} from "../util";
+import CreateMusicRoomModal from "../modals/CreateMusicRoomModal";
+import JoinMusicRoomModal from "../modals/JoinMusicRoomModal";
 
 type HomeScreenProps = {
-  title: string;
+    username: string;
+    title: string;
+    setMusicRoomProps: React.Dispatch<React.SetStateAction<MusicRoomBoxProps>>;
 };
 
-export default function HomeScreen({ title }: HomeScreenProps) {
-  const { username, musicRooms, setMusicRooms, refresh } = useUserInfos();
-  const navigation = useNavigation();
+export default function HomeScreen({
+    username,
+    setMusicRoomProps
+}: HomeScreenProps) {
+    const [musicRooms, setMusicRooms] = useState<MusicRoomBoxProps[]>([]);
+    const navigation = useNavigation();
 
-  useEffect(() => {
-    console.log("refreshing");
-    refresh;
-  }, []);
+    const [createRoomModalVisible, setCreateRoomModalVisible] =
+        useState<boolean>(false);
 
-  const openCreateRoomModal = () => {
-    navigation.navigate("CreateMusicRoomModal");
-  };
+    const [joinRoomModalVisible, setJoinRoomModalVisible] =
+        useState<boolean>(false);
 
-  const joinNewMusicRoom = () => {
-    console.log("join new room");
-  };
+    useEffect(() => {
+        retrieveMusicRoomsFromServer(username).then((retrievedMusicRooms) => {
+            setMusicRooms(retrievedMusicRooms);
+        });
+    }, []);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.roomButtons}>
-        <TouchableOpacity
-          activeOpacity={0.95}
-          style={styles.button}
-          onPress={openCreateRoomModal}
-        >
-          <Text style={styles.buttonText}>Create a new music room</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.95}
-          style={styles.button}
-          onPress={joinNewMusicRoom}
-        >
-          <Text style={styles.buttonText}>Join a new music room</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.title}>Your music rooms: </Text>
-      <View style={styles.musicRooms}>
-        {musicRooms.map((props, index) => {
-          <View style={styles.musicRoomBox}>
-            <MusicRoom {...props} />
-          </View>;
-        })}
-      </View>
-    </View>
-  );
+    const addMusicRoom = (musicRoom: MusicRoomBoxProps) => {
+        setMusicRooms(musicRooms.concat(musicRoom));
+    };
+
+    const joinMusicRoom = (musicRoom: MusicRoomBoxProps) => {
+        setMusicRooms(musicRooms.concat(musicRoom));
+    };
+
+    const navigateToMusicRoom = (musicRoomProps: MusicRoomBoxProps) => {
+        setMusicRoomProps(musicRoomProps);
+        navigation.navigate("MusicRoom");
+    };
+
+    return (
+        <>
+            {<CreateMusicRoomModal
+                visible={createRoomModalVisible}
+                username={username}
+                addMusicRoom={addMusicRoom}
+                closeModal={() => setCreateRoomModalVisible(false)}
+            />}
+            <JoinMusicRoomModal
+                visible={joinRoomModalVisible}
+                username={username}
+                joinMusicRoom={joinMusicRoom}
+                closeModal={() => setJoinRoomModalVisible(false)}
+            />
+            <View style={styles.container}>
+                <View style={styles.roomButtons}>
+                    <TouchableOpacity
+                        activeOpacity={0.95}
+                        style={styles.button}
+                        onPress={() => setCreateRoomModalVisible(true)}
+                    >
+                        <Text style={styles.buttonText}>Create a new music room</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        activeOpacity={0.95}
+                        style={styles.button}
+                        onPress={() => setJoinRoomModalVisible(true)}
+                    >
+                        <Text style={styles.buttonText}>Join a new music room</Text>
+                    </TouchableOpacity>
+                </View>
+                <Text style={styles.title}>Your music rooms: </Text>
+                <ScrollView style={styles.scrollView}>
+                    {musicRooms.map((props, index) => 
+                        <MusicRoomBox {...props} onClick={navigateToMusicRoom} key={index}/>
+                    )}
+                </ScrollView>
+            </View>
+        </>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 30,
-  },
-  roomButtons: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  button: {
-    borderRadius: 5,
-    flexDirection: "row",
-    height: 50,
-    backgroundColor: "#ff99ff",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    elevation: 0,
-    width: "45%",
-  },
-  buttonText: {
-    padding: 5,
-    justifyContent: "space-evenly",
-  },
-  musicRooms: {
-    marginTop: 20,
-  },
-  joinRoomButton: {
-    width: "40%",
-  },
-  title: {
-    padding: 10,
-    flex: 4,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  musicRoomBox: {
-    marginBottom: 20,
-  },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        padding: 30
+    },
+    roomButtons: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
+    musicNameText: {
+        fontSize: 15,
+        justifyContent: "center",
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginTop: "auto",
+        marginBottom: "auto"
+    },
+    button: {
+        borderRadius: 5,
+        flexDirection: "row",
+        height: 50,
+        backgroundColor: "#ff99ff",
+        alignItems: "center",
+        justifyContent: "center",
+        elevation: 0,
+        width: "45%"
+    },
+    buttonText: {
+        padding: 5,
+        justifyContent: "space-evenly"
+    },
+    scrollView: {
+        marginTop: 5
+    },
+    joinRoomButton: {
+        width: "40%"
+    },
+    title: {
+        padding: 10,
+        fontSize: 20,
+        fontWeight: "bold"
+    },
+    musicRoomBox: {
+        marginBottom: 20,
+        borderWidth: 1,
+        height: 40,
+        borderRadius: 5
+    }
 });

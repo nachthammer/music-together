@@ -30,7 +30,7 @@ class MusicContent(db.Model):  # type: ignore
     __tablename__ = "music_content"
 
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.Text(), unique=False, nullable=False)
+    music_room_uuid = db.Column(db.Text(), unique=False, nullable=False)
     song_name = db.Column(db.Text(), unique=False, nullable=False)
     content_url = db.Column(db.Text(), unique=False, nullable=False)
     mp3_encoded = db.Column(db.Text(), unique=False, nullable=False)

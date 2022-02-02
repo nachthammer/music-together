@@ -5,7 +5,7 @@ from sqlalchemy.exc import OperationalError  # type: ignore
 
 from source.utils import verify_user_data, username_already_exists, email_already_exists, register_user, \
     music_room_name_for_username_already_exists, add_music_room_for_user, get_music_rooms_for_user, \
-    music_url_already_in_the_room, insert_content_into_music_room, get_content_from_room
+    music_url_already_in_the_room, insert_song_into_music_room, get_content_from_room
 from source import app
 
 
@@ -92,51 +92,51 @@ def add_music_room():
     return uuid, 200
 
 
-@app.route('/api/add-content-to-room', methods=["POST"])
-def add_content_to_room():
+@app.route('/api/add-song-to-room', methods=["POST"])
+def add_song_to_room():
     request_data = json.loads(request.data.decode(encoding="utf-8"))
     print(request_data)
     if "username" not in request_data:
         return "You need to provide a value for the username key.", 400
-    if "musicRoomName" not in request_data:
-        return "You need to provide a value for the music room name key.", 400
-    if "content" not in request_data:
-        return "You need to provide a value for the content key.", 400
+    if "uuid" not in request_data:
+        return "You need to provide a value for the music room uuid.", 400
+    if "songName" not in request_data:
+        return "You need to provide a value for the song name.", 400
+    if "songUrl" not in request_data:
+        return "You need to provide a value for the url.", 400
 
     if len(str(request_data["username"])) < 4:
         return "Non-valid username", 400
-    if len(str(request_data["musicRoomName"])) < 1:
+    if len(str(request_data["uuid"])) < 1:
         return "Music room name cannot be empty", 400
-    if len(str(request_data["content"])) < 1:
-        return "Content name cannot be empty", 400
+    if len(str(request_data["songName"])) < 1:
+        return "Song name cannot be empty", 400
+    if len(str(request_data["songUrl"])) < 1:
+        return "Song URL cannot be empty", 400
 
-    if music_url_already_in_the_room(request_data["content"], request_data["musicRoomName"]):
+    if music_url_already_in_the_room(song_url=request_data["songUrl"], music_room_uuid=request_data["uuid"]):
         return "Music room name already exists", 400
 
-    insert_content_into_music_room(request_data["content"], request_data["musicRoomName"])
+    insert_song_into_music_room(request_data["songName"], request_data["songUrl"], request_data["uuid"])
 
     return "Song successfully inserted", 200
 
 
-@app.route('/api/get-content-from-room', methods=["POST"])
-def get_content_from_room():
+@app.route('/api/get-songs-from-uuid', methods=["POST"])
+def get_songs_from_uuid():
     request_data = json.loads(request.data.decode(encoding="utf-8"))
     print(request_data)
     if "username" not in request_data:
         return "You need to provide a value for the username key.", 400
-    if "musicRoomName" not in request_data:
-        return "You need to provide a value for the music room name key.", 400
+    if "uuid" not in request_data:
+        return "You need to provide a value for the uuid key.", 400
 
     if len(str(request_data["username"])) < 4:
         return "Non-valid username", 400
-    if len(str(request_data["musicRoomName"])) < 1:
-        return "Music room name cannot be empty", 400
 
-    music_contents = get_content_from_room(request_data["musicRoomName"])
+    music_contents = get_content_from_room(request_data["uuid"])
 
     return jsonify(music_contents), 200
-
-
 
 
 @app.route("/api/health", methods=["GET", "POST"])

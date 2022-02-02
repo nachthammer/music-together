@@ -7,41 +7,42 @@ import {MusicRoomBoxProps} from "../components/MusicRoomBox";
 import Button from "../components/Button";
 
 type CreateMusicRoomModalProps = {
-    username: string;
-    visible?: boolean;
-    addMusicRoom: (musicRoom: MusicRoomBoxProps) => void;
-    closeModal: () => void;
+  username: string;
+  visible?: boolean;
+  joinMusicRoom: (musicRoom: MusicRoomBoxProps) => void;
+  closeModal: () => void;
 };
 
 export default function CreateMusicRoomModal({
     username,
     visible,
-    addMusicRoom,
+    joinMusicRoom,
     closeModal
 }: CreateMusicRoomModalProps) {
-    const [musicRoomName, setMusicRoomName] = useState<string>("");
+    const [musicRoomUUID, setMusicRoomUUID] = useState<string>("");
 
     const [createMusicRoomFailedText, setCreateMusicRoomFailedText] =
-        useState<string>("");
+      useState<string>("");
 
     const [creatingFailed, setCreatingFailed] = useState<boolean>(false);
     const [createSucceeded, setCreateSucceeded] = useState<boolean>(false);
 
-    const createNewMusicRoom = () => {
+    const joinNewMusicRoom = () => {
+        console.log("join new room for user", username);
         const requestData = {
             username: username,
-            musicRoomName: musicRoomName
+            musicRoomName: musicRoomUUID
         };
 
         axios
-            .post("/api/create-music-room", requestData)
+            .post("/api/join-music-room", requestData)
             .then((response) => {
-                const newMusicRoom: MusicRoomBoxProps = {
-                    uuid: response.data,
-                    name: musicRoomName,
+                const joinedMusicRoom: MusicRoomBoxProps = {
+                    uuid: response.data.uuid,
+                    name: response.data.name,
                     username: username
                 };
-                addMusicRoom(newMusicRoom);
+                joinMusicRoom(joinedMusicRoom);
                 setCreatingFailed(false);
                 setCreateSucceeded(true);
             })
@@ -54,33 +55,33 @@ export default function CreateMusicRoomModal({
 
     return (
         <BaseModal isVisible={visible} closeModal={closeModal}>
-            <Text style={styles.title}>Create a new music room</Text>
+            <Text style={styles.title}>Join new music room</Text>
             <View style={styles.inputBox}>
                 <Text style={styles.info}>Music room name</Text>
                 <TextInput
                     style={styles.inputElement}
-                    onChangeText={setMusicRoomName}
-                    value={musicRoomName}
+                    onChangeText={setMusicRoomUUID}
+                    value={musicRoomUUID}
                     placeholder="music room name"
                 />
             </View>
 
             <View style={styles.submitButton}>
-                <Button title={"Create a new room"} onPress={createNewMusicRoom} style={{width: "100%"}}/>
+                <Button title={"Join a new room"} onPress={joinNewMusicRoom} style={{width: "100%"}}/>
             </View>
-            {creatingFailed && createMusicRoomFailedText !== "" && 
-                <View style={{marginTop: 10}}>
-                    <Text style={{color: "red"}}>
-                        {createMusicRoomFailedText}
-                    </Text>
-                </View>
+            {creatingFailed && createMusicRoomFailedText !== "" &&
+            <View style={{marginTop: 20}}>
+                <Text style={{color: "red"}}>
+                    {createMusicRoomFailedText}
+                </Text>
+            </View>
             }
-            {createSucceeded && 
-                <View style={{marginTop: 10}}>
-                    <Text style={{color: "green"}}>
-                        {"Music room successfully created"}
-                    </Text>
-                </View>
+            {createSucceeded &&
+            <View style={{marginTop: 20}}>
+                <Text style={{color: "green"}}>
+                    {"Music room successfully joined"}
+                </Text>
+            </View>
             }
         </BaseModal>
     );
@@ -125,5 +126,8 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         marginTop: 10
+    },
+    submitText: {
+        fontSize: 16
     }
 });

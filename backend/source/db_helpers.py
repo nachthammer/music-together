@@ -57,28 +57,38 @@ def db_insert_music_room_for_user(username: str, music_room_name: str) -> Option
     return uuid
 
 
-def db_get_content_from_room(music_room_name: str) -> Optional[List[str]]:
-    content_list = MusicContent.query.filter_by(music_room_name=music_room_name).all()
+def db_get_content_from_room(uuid: str) -> Optional[List[Tuple[str, str]]]:
+    content_list = MusicContent.query.filter_by(music_room_uuid=uuid).all()
     if content_list is None or len(content_list) == 0:
         return None
-    return [content.content_url for content in content_list]
+    return [(content.song_name, content.content_url) for content in content_list]
 
 
-def db_add_content_to_room(content: str, music_room_name: str, song_name: str, mp3_encoded: str):
+def db_add_content_to_room(song_url: str, song_name: str, music_room_uuid: str, mp3_encoded: str):
     music_content_row = MusicContent.query.filter_by(
-        music_room_name=music_room_name,
-        content_url=content).first()
+        music_room_uuid=music_room_uuid,
+        content_url=song_url).first()
     if music_content_row is not None:
+        print("already present")
         return
 
     content_key = MusicContent(
-        music_room_name=music_room_name,
-        content_url=content,
+        music_room_uuid=music_room_uuid,
+        content_url=song_url,
         song_name=song_name,
         mp3_encoded=mp3_encoded
     )
     db.session.add(content_key)
     db.session.commit()
+
+
+def db_song_url_already_exists(song_url: str, music_room_uuid: str) -> bool:
+    music_content_row = MusicContent.query.filter_by(
+        music_room_uuid=music_room_uuid,
+        content_url=song_url).first()
+    if music_content_row is not None:
+        return True
+    return False
 
 
 def db_music_room_present_for_user(username: str, music_room_name: str) -> bool:

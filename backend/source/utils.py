@@ -2,7 +2,7 @@ from typing import Optional, List, Tuple
 
 from source.db_helpers import db_get_user_secret_and_salt_if_exists, db_get_user_by_username, db_get_user_by_email, \
     db_create_user_row, db_music_room_present_for_user, db_insert_music_room_for_user, db_get_music_rooms_from_user, \
-    db_get_content_from_room, db_add_content_to_room
+    db_get_content_from_room, db_add_content_to_room, db_song_url_already_exists
 from source.secrets import get_encrypted_user_secret_from_secret_params, _sha512
 from source.youtube_api import url_to_mp3_encoded
 
@@ -40,18 +40,16 @@ def get_music_rooms_for_user(username: str) -> List[Tuple[str, str]]:
     return music_rooms
 
 
-def music_url_already_in_the_room(content: str, music_room_name: str) -> bool:
-    if content in db_get_content_from_room(music_room_name):
-        return True
-    return False
+def music_url_already_in_the_room(song_url: str, music_room_uuid: str) -> bool:
+    return db_song_url_already_exists(song_url=song_url, music_room_uuid=music_room_uuid)
 
 
-def get_content_from_room(music_room_name: str) -> Optional[List[str]]:
-    return db_get_content_from_room(music_room_name=music_room_name)
+def get_content_from_room(music_room_uuid: str) -> Optional[List[Tuple[str, str]]]:
+    return db_get_content_from_room(uuid=music_room_uuid)
 
 
-def insert_content_into_music_room(content: str, music_room_name: str):
-    db_add_content_to_room(content=content, music_room_name=music_room_name, song_name=content, mp3_encoded=url_to_mp3_encoded(content))
+def insert_song_into_music_room(song_name: str, song_url: str, music_room_uuid: str):
+    db_add_content_to_room(song_name=song_name, song_url=song_url, music_room_uuid=music_room_uuid, mp3_encoded=url_to_mp3_encoded(song_url))
 
 
 def username_already_exists(username: str) -> bool:

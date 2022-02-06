@@ -5,7 +5,7 @@ import BaseModal from "./BaseModal";
 import axios from "axios";
 import {MusicRoomBoxProps} from "../components/MusicRoomBox";
 import Button from "../components/Button";
-import {readUsername} from "../stores/UserStore";
+import {readUsername} from "../storage/UserStore";
 
 type CreateMusicRoomModalProps = {
   visible?: boolean;

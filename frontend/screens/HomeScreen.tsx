@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ScrollView, StyleSheet, TouchableOpacity} from "react-native";
+import {ScrollView, StyleSheet} from "react-native";
 
 import {Text, View} from "../components/Themed";
 import Button from "../components/Button";
@@ -9,90 +9,116 @@ import {retrieveMusicRoomsFromServer} from "../util";
 import CreateMusicRoomModal from "../modals/CreateMusicRoomModal";
 import JoinMusicRoomModal from "../modals/JoinMusicRoomModal";
 import MusicRoomSettingsModal from "../modals/MusicRoomSettingsModal";
-import {readUsername} from "../stores/UserStore";
+import {readUsername} from "../storage/UserStore";
+import {useUserContext} from "../stores/contexts/UserContext";
+import {useMusicRoomsContext} from "../stores/contexts/MusicRoomsContext";
+import {UserContextActionTypes} from "../stores/actions/UserAction";
+import {MusicRoomsContextActionTypes} from "../stores/actions/MusicRoomsAction";
 
-type HomeScreenProps = {
-    title: string;
-    currentMusicRoomProps:  MusicRoomBoxProps;
-    setMusicRoomProps: React.Dispatch<React.SetStateAction<MusicRoomBoxProps>>;
-};
+type HomeScreenProps = {};
 
-export default function HomeScreen({
-    currentMusicRoomProps,
-    setMusicRoomProps
-}: HomeScreenProps) {
+export default function HomeScreen() {
+    // all contexts
+    const [username, dispatchUsername] = [useUserContext().state.username, useUserContext().dispatch];
+    const [musicRooms, dispatchMusicRooms] = [useMusicRoomsContext().state.musicRooms, useMusicRoomsContext().dispatch];
+    const [currentMusicRoom] = [useMusicRoomsContext().state.currentMusicRoom];
     const [isLoading, setIsLoading] = useState(true);
-    const [username, setUsername] = useState("");
-    const [musicRooms, setMusicRooms] = useState<MusicRoomBoxProps[]>([]);
+
     const navigation = useNavigation();
 
     const [createRoomModalVisible, setCreateRoomModalVisible] =
         useState<boolean>(false);
     const [joinRoomModalVisible, setJoinRoomModalVisible] =
         useState<boolean>(false);
-    const [musicRoomSettingsModalVisible, setMusicRoomSettingsModalVisible] = useState<boolean>(false);
+    const [musicRoomSettingsModalVisible, setMusicRoomSettingsModalVisible] =
+        useState<boolean>(false);
 
     useEffect(() => {
-        readUsername().then((value) => {
-            setUsername(value);
+        readUsername().then((value: string) => {
+            dispatchUsername({type: UserContextActionTypes.SET_USERNAME, payload: value});
         });
     }, []);
 
     useEffect(() => {
         retrieveMusicRoomsFromServer(username).then((retrievedMusicRooms) => {
-            setMusicRooms(retrievedMusicRooms);
+            dispatchMusicRooms({type: MusicRoomsContextActionTypes.SET_MUSIC_ROOMS, payload: retrievedMusicRooms});
             setIsLoading(false);
         });
-    }, [createRoomModalVisible, joinRoomModalVisible, musicRoomSettingsModalVisible, username]);
+    }, [
+        createRoomModalVisible,
+        joinRoomModalVisible,
+        musicRoomSettingsModalVisible,
+        username
+    ]);
 
     const addMusicRoom = (musicRoom: MusicRoomBoxProps) => {
-        setMusicRooms(musicRooms.concat(musicRoom));
-    };
-
-    const openMusicRoomSettings = () => {
-        setMusicRoomSettingsModalVisible(true);
+        dispatchMusicRooms({type: MusicRoomsContextActionTypes.ADD_MUSIC_ROOM, payload: musicRoom});
     };
 
     const removeMusicRoom = () => {
-        let newMusicRooms = musicRooms.filter(function(props, index, arr){
-            return props.uuid !== currentMusicRoomProps.uuid;
-        });
-        setMusicRooms(newMusicRooms);
+        dispatchMusicRooms({type: MusicRoomsContextActionTypes.REMOVE_MUSIC_ROOM, payload: currentMusicRoom});
     };
 
     const joinMusicRoom = (musicRoom: MusicRoomBoxProps) => {
-        setMusicRooms(musicRooms.concat(musicRoom));
+        dispatchMusicRooms({type: MusicRoomsContextActionTypes.ADD_MUSIC_ROOM, payload: musicRoom});
     };
 
     const navigateToMusicRoom = () => {
         navigation.navigate("MusicRoom");
     };
 
+    const openMusicRoomSettings = () => {
+        setMusicRoomSettingsModalVisible(true);
+    };
+
     return (
-        !isLoading && <>
-            {<CreateMusicRoomModal
-                visible={createRoomModalVisible}
-                addMusicRoom={addMusicRoom}
-                closeModal={() => setCreateRoomModalVisible(false)}
-            />}
-            <JoinMusicRoomModal
-                visible={joinRoomModalVisible}
-                joinMusicRoom={joinMusicRoom}
-                closeModal={() => setJoinRoomModalVisible(false)}
-            />
-            <View style={styles.container}>
-                <View style={styles.roomButtons}>
-                    <Button title={"Create a new music room"} onPress={() => setCreateRoomModalVisible(true)} style={{width: "45%"}}/>
-                    <Button title={"Join a new music room"} onPress={() => setJoinRoomModalVisible(true)} style={{width: "45%"}}/>
+        <>
+            {!isLoading &&
+            <>
+                {
+                    <CreateMusicRoomModal
+                        visible={createRoomModalVisible}
+                        addMusicRoom={addMusicRoom}
+                        closeModal={() => setCreateRoomModalVisible(false)}
+                    />
+                }
+                <JoinMusicRoomModal
+                    visible={joinRoomModalVisible}
+                    joinMusicRoom={joinMusicRoom}
+                    closeModal={() => setJoinRoomModalVisible(false)}
+                />
+                <View style={styles.container}>
+                    <View style={styles.roomButtons}>
+                        <Button
+                            title={"Create a new music room"}
+                            onPress={() => setCreateRoomModalVisible(true)}
+                            style={{width: "45%"}}
+                        />
+                        <Button
+                            title={"Join a new music room"}
+                            onPress={() => setJoinRoomModalVisible(true)}
+                            style={{width: "45%"}}
+                        />
+                    </View>
+                    <Text style={styles.title}>Your music rooms</Text>
+                    <ScrollView style={styles.scrollView}>
+                        {musicRooms.map((props, index) =>
+                            <MusicRoomBox
+                                {...props}
+                                onClick={navigateToMusicRoom}
+                                onLongClick={openMusicRoomSettings}
+                                key={index}
+                            />
+                        )}
+                    </ScrollView>
+                    <MusicRoomSettingsModal
+                        visible={musicRoomSettingsModalVisible}
+                        removeMusicRoom={removeMusicRoom}
+                        closeModal={() => setMusicRoomSettingsModalVisible(false)}
+                    />
                 </View>
-                <Text style={styles.title}>Your music rooms: {username}</Text>
-                <ScrollView style={styles.scrollView}>
-                    {musicRooms.map((props, index) => 
-                        <MusicRoomBox {...props} onClick={navigateToMusicRoom} onLongClick={openMusicRoomSettings} key={index}/>
-                    )}
-                </ScrollView>
-                <MusicRoomSettingsModal visible={musicRoomSettingsModalVisible} removeMusicRoom={removeMusicRoom} closeModal={() => setMusicRoomSettingsModalVisible(false)}></MusicRoomSettingsModal>
-            </View>
+            </>
+            }
         </>
     );
 }
@@ -137,6 +163,7 @@ const styles = StyleSheet.create({
         width: "40%"
     },
     title: {
+        justifyContent: "space-evenly",
         padding: 10,
         fontSize: 20,
         fontWeight: "bold"

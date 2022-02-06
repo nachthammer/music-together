@@ -3,12 +3,11 @@ import {StyleSheet, TextInput} from "react-native";
 import {Text, View} from "../components/Themed";
 import BaseModal from "./BaseModal";
 import axios from "axios";
-import {SongProps} from "../screens/MusicRoomScreen";
 import Button from "../components/Button";
 import { MusicRoomBoxProps } from "../components/MusicRoomBox";
 import AreYouSureModal from "./AreYouSureModal";
-import {readUsername} from "../stores/UserStore";
-import {readCurrentMusicRoom} from "../stores/MusicRoomStore";
+import {readUsername} from "../storage/UserStore";
+import {readCurrentMusicRoom} from "../storage/MusicRoomStore";
 
 
 type MusicRoomSettingsModalProps = {

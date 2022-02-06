@@ -5,7 +5,7 @@ import BaseModal from "./BaseModal";
 import axios from "axios";
 import {SongProps} from "../screens/MusicRoomScreen";
 import Button from "../components/Button";
-import {readUsername} from "../stores/UserStore";
+import {readUsername} from "../storage/UserStore";
 
 
 type CreateMusicRoomModalProps = {
@@ -43,7 +43,8 @@ export default function AddSongModal({visible, music_room_uuid, addSong, closeMo
                 if (response.data === "Song successfully inserted") {
                     addSong({
                         name: songName,
-                        songUrl: songUrl
+                        songUrl: songUrl,
+                        musicRoomUuid: music_room_uuid
                     });
                 }
                 setReturnedMessage(response.data);

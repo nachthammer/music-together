@@ -19,8 +19,8 @@ export default function AreYouSureModal({visible, message, confirm, cancel, conf
         <BaseModal isVisible={visible} closeModal={closeModal}>
             <Text style={styles.title}>{message ?? "Are you sure?"}</Text>
             <View style={styles.roomButtons}>
-                <Button title={confirmMessage ?? "Yes"} onPress={confirm} style={styles.button}></Button>
-                <Button title={cancelMessage ?? "Cancel"} onPress={cancel} style={styles.button}></Button>
+                <Button title={confirmMessage ?? "Yes"} onPress={confirm} style={styles.button}/>
+                <Button title={cancelMessage ?? "Cancel"} onPress={cancel} style={styles.button}/>
             </View>
         </BaseModal>
     );

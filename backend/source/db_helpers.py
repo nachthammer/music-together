@@ -102,6 +102,12 @@ def db_get_content_from_room(uuid: str) -> Optional[List[Tuple[str, str]]]:
     return [(content.song_name, content.content_url) for content in content_list]
 
 
+def db_remove_song_width_room_uuid(song_url: str, song_name: str, uuid: str):
+    row_delete = MusicContent.query.filter_by(song_name=song_name, content_url=song_url, music_room_uuid=uuid).first()
+    db.session.delete(row_delete)
+    db.session.commit()
+
+
 def db_add_content_to_room(song_url: str, song_name: str, music_room_uuid: str, mp3_encoded: str):
     music_content_row = MusicContent.query.filter_by(
         music_room_uuid=music_room_uuid,

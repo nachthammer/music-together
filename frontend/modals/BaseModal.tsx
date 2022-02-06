@@ -1,7 +1,6 @@
 import React from "react";
 import {Modal, StyleSheet} from "react-native";
-
-import Button from "../components/Button";
+import BackButton from "../components/BackButton";
 import {View} from "../components/Themed";
 
 export type BaseModalProps = {
@@ -10,18 +9,23 @@ export type BaseModalProps = {
   children?: React.ReactNode;
 };
 
-export default function BaseModal({ closeModal, isVisible, children }: BaseModalProps) {
+export default function BaseModal({
+    closeModal,
+    isVisible,
+    children
+}: BaseModalProps) {
     const closeModalCustom = () => {
         closeModal();
     };
     return (
-        <Modal visible={isVisible}>
+        <Modal
+            visible={isVisible}
+            animationType={"fade"}
+            transparent={true}
+            onRequestClose={closeModal}
+        >
             <View style={styles.container}>
-                <Button
-                    title={"Go back"}
-                    style={styles.backButton}
-                    onPress={closeModalCustom}
-                />
+                <BackButton style={styles.backButton} onPress={closeModalCustom} />
                 {children}
             </View>
         </Modal>

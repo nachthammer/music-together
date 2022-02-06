@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data.">
+    <list default="true" id="97509315-8928-4970-8f09-6f14b5fc31b9" name="Changes" comment="fix: lint pipeline">
+      <change afterPath="$PROJECT_DIR$/components/LogoutButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/storage/UserStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/source/db_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/db_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/source/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/source/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/source/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hooks/useCachedResources.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useCachedResources.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stores/MusicRoomStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stores/MusicRoomStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/EditScreenInfo.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/SongBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/SongBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modals/BaseModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/modals/BaseModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/HomeScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/HomeScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/LoginScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/LoginScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/MusicRoomScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/MusicRoomScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/MusicRoomStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/storage/MusicRoomStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stores/UserStore.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/util.ts" beforeDir="false" afterPath="$PROJECT_DIR$/util.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,17 +50,19 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="eslint.code.style.apply.dismiss" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pathVariables" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2021.2.2\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -60,7 +77,13 @@
       <workItem from="1643755991947" duration="8623000" />
       <workItem from="1643765484261" duration="2412000" />
       <workItem from="1643767927822" duration="1278000" />
-      <workItem from="1643821862801" duration="10601000" />
+      <workItem from="1643821862801" duration="11565000" />
+      <workItem from="1643926388527" duration="2557000" />
+      <workItem from="1643929643254" duration="565000" />
+      <workItem from="1643983298788" duration="593000" />
+      <workItem from="1644175408485" duration="677000" />
+      <workItem from="1644176969784" duration="15000" />
+      <workItem from="1644176986999" duration="154000" />
     </task>
     <task id="LOCAL-00001" summary="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data.">
       <created>1643844269422</created>
@@ -69,7 +92,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643844269422</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix: lint pipeline">
+      <created>1643844670424</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1643844670424</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -120,6 +150,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: a lot og things done in the frontend" />
     <MESSAGE value="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add more functionality, add room, delete room, edit room name, settings for music room name, start using the async store to retrieve data." />
+    <MESSAGE value="fix: lint pipeline" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: lint pipeline" />
   </component>
 </project>

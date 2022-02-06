@@ -1,7 +1,7 @@
-import {StyleSheet, TouchableOpacity, Pressable} from "react-native";
+import {StyleSheet, TouchableOpacity} from "react-native";
 import {Text} from "./Themed";
 import React from "react";
-import {storeCurrentMusicRoom} from "../stores/MusicRoomStore";
+import {storeCurrentMusicRoom} from "../storage/MusicRoomStore";
 
 export type MusicRoomBoxProps = {
     uuid: string;

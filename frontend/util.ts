@@ -1,5 +1,6 @@
 import axios from "axios";
-import { MusicRoomBoxProps } from "./components/MusicRoomBox";
+import {MusicRoomBoxProps} from "./components/MusicRoomBox";
+import {readUsername} from "./storage/UserStore";
 
 export async function retrieveMusicRoomsFromServer(
     username: string
@@ -20,4 +21,15 @@ export async function retrieveMusicRoomsFromServer(
         });
     }
     return musicRoomArray;
+}
+
+export function isLoggedIn() {
+    readUsername()
+        .then((username) => {
+            return username !== "";
+        })
+        .catch((err) => {
+            return false;
+        });
+    return false;
 }

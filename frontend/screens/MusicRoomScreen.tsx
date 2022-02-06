@@ -1,48 +1,35 @@
-import {Text, View} from "../components/Themed";
-import {ScrollView, StyleSheet} from "react-native";
+import { Text, View } from "../components/Themed";
+import { ScrollView, StyleSheet } from "react-native";
 import Button from "../components/Button";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useNavigation} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import AddSongModal from "../modals/AddSongModal";
 import SongBox from "../components/SongBox";
-import {readUsername} from "../stores/UserStore";
-import {readCurrentMusicRoom} from "../stores/MusicRoomStore";
+import { readUsername } from "../storage/UserStore";
+import { readCurrentMusicRoom } from "../storage/MusicRoomStore";
 import { MusicRoomBoxProps } from "../components/MusicRoomBox";
+import {useUserContext} from "../stores/contexts/UserContext";
+import {useMusicRoomsContext} from "../stores/contexts/MusicRoomsContext";
 
 export type SongProps = {
-    name: string;
-    songUrl: string;
+  name: string;
+  songUrl: string;
+  musicRoomUuid: string;
 };
 
-export type MusicRoomScreenProps = {
-
-};
+export type MusicRoomScreenProps = {};
 
 // eslint-disable-next-line no-empty-pattern
 export default function MusicRoomScreen({}: MusicRoomScreenProps) {
     const navigation = useNavigation();
-    const [username, setUsername] = useState("");
-    useEffect(() => {
-        readUsername().then((value) => {
-            setUsername(value);
-        });
-    }, []);
-    const [musicRoomProps, setMusicRoomProps] = useState<MusicRoomBoxProps>({
-        name: "",
-        uuid: "",
-        username: ""
-    });
-    useEffect(() => {
-        readCurrentMusicRoom().then((value) => {
-            setMusicRoomProps(value);
-        });
-    }, [navigation]);
-
+    const [username] = [useUserContext().state.username];
+    const [currentMusicRoom] = [useMusicRoomsContext().state.currentMusicRoom];
 
     const [songs, setSongs] = useState<SongProps[]>([]);
 
-    const [addSongModalVisible, setAddSongModalVisible] = useState<boolean>(false);
+    const [addSongModalVisible, setAddSongModalVisible] =
+    useState<boolean>(false);
 
     const openAddSongModal = () => {
         setAddSongModalVisible(true);
@@ -55,7 +42,7 @@ export default function MusicRoomScreen({}: MusicRoomScreenProps) {
     useEffect(() => {
         const requestData = {
             username: username,
-            uuid: musicRoomProps.uuid
+            uuid: currentMusicRoom.uuid
         };
         axios
             .post("/api/get-songs-from-uuid", requestData)
@@ -65,14 +52,13 @@ export default function MusicRoomScreen({}: MusicRoomScreenProps) {
                 for (let i = 0; i < data.length; i++) {
                     allSongs.push({
                         name: data[i][0],
-                        songUrl: data[i][1]
+                        songUrl: data[i][1],
+                        musicRoomUuid: currentMusicRoom.uuid
                     });
                 }
                 setSongs(allSongs);
             })
-            .catch(() => {
-
-            });
+            .catch(() => {});
     }, []);
 
     const addSongToRoom = (newSong: SongProps) => {
@@ -83,16 +69,25 @@ export default function MusicRoomScreen({}: MusicRoomScreenProps) {
         <View style={styles.container}>
             {
                 <>
-                    <Button title="Add new song" onPress={openAddSongModal} style={{height: 35}}/>
-                    <AddSongModal visible={addSongModalVisible} addSong={addSongToRoom} closeModal={closeAddSongModal}
-                        music_room_uuid={musicRoomProps.uuid}/>
+                    <Button
+                        title="Add new song"
+                        onPress={openAddSongModal}
+                        style={{ height: 35 }}
+                    />
+                    <AddSongModal
+                        visible={addSongModalVisible}
+                        addSong={addSongToRoom}
+                        closeModal={closeAddSongModal}
+                        music_room_uuid={currentMusicRoom.uuid}
+                    />
                 </>
-
             }
-            <Text style={{fontSize: 16, marginTop: 10}}>Current available songs:</Text>
+            <Text style={{ fontSize: 16, marginTop: 10 }}>
+        Current available songs:
+            </Text>
             <ScrollView style={styles.scrollView}>
                 {songs.map((props, index) => 
-                    <SongBox {...props} key={index}/>
+                    <SongBox {...props} key={index} />
                 )}
             </ScrollView>
         </View>

@@ -175,6 +175,20 @@ def get_songs_from_uuid():
     return jsonify(music_contents), 200
 
 
+@app.route('/api/remove-song-from-room', methods=["POST"])
+def remove_song_from_room():
+    request_data = json.loads(request.data.decode(encoding="utf-8"))
+    print(request_data)
+    mandatory_keys = ["songName", "songUrl", "roomUuid"]
+    for key in mandatory_keys:
+        if key not in request_data:
+            return f"You need to provide a value for the {key} key.", 400
+
+    remove_song_from_room(request_data["songName"], request_data["songUrl"], request_data["uuid"])
+
+    return "Song successfully removed", 200
+
+
 @app.route("/api/health", methods=["GET", "POST"])
 def health():
     return "Ok", 200
